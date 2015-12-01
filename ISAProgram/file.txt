@@ -1,0 +1,7 @@
+ 
+LOAD  R1,  X
+MULT  R1,  Y //multiply r1 and Y and store in R1
+LOAD  R2,  W
+MINUS R2,  U //subtract w - u and store in R2
+ADD   R1,  R2 //add values in R1 and R2 and store in R1
+OUTPUT	R1
