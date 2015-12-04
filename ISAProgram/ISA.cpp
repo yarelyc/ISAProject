@@ -16,10 +16,19 @@
 using namespace std;
 void loadInstructions(ifstream& file);
 int main(){
+    unordered_map<string,int> intVariaMap; //the key: variable name, value: type value
+    //unordered_map<string, char> charVariaMap;
 
-        ifstream file;
-        file.open( "file.txt");
-        loadInstructions(file);
+    unordered_map<string,int> intRegisMap;  //the key: register name, value: type value
+   // unordered_map<string, char> charRegisMap;
+
+    list<int> intMemoryLink; //linkList for memory
+    //list<char> charMemoryLink; //linkList for memory
+
+
+    ifstream file;
+    file.open( "file.txt");
+    loadInstructions(file);
 
     return EXIT_SUCCESS;
 }
