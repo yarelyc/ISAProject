@@ -1,4 +1,3 @@
- 
 LOAD  R1,  X
 MULT  R1,  Y //multiply r1 and Y and store in R1
 LOAD  R2,  W

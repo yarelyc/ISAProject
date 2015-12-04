@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1449199175 source:c:\users\araceli\desktop\isacss3\isaproject\isaprogram\isa.cpp
+	<iostream>
+	<cstdlib>
+	<fstream>
+
