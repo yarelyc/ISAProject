@@ -14,7 +14,7 @@
 #include <list>
 #include <cstdlib>
 #include <fstream>
-
+#include <string>
 using namespace std;
 
 void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
@@ -72,10 +72,10 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                     cout<<"int"<<endl;
                     if(variable.length() == 2 && variable[0] == 'R'){
                         //insert into register map
-                        intRegisMap.insert({variable,  stoi(row)});
+                        intRegisMap.insert({variable, stoi(row)});
                     }
                     else{
-                       intVariaMap.insert({variable,  stoi(row)});
+                      intVariaMap.insert({variable,  stoi(row)});
                     }
                     break;
                 case 'c':
@@ -94,7 +94,90 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
          }
           while (getline(file,row)){
 
-            cout<<row<<endl;
+             cout<<row<<endl;
+             cout<<row.length()<<endl;
+
+            first_index = row.find(' ');
+            variable = row.substr(0, first_index);
+
+            row = row.substr(first_index+1, row.length() - first_index);
+
+            if(variable == "LOAD"){
+
+                cout << row << endl;
+            }
+
+            else if(variable == "INPUT"){
+                 cout << row << endl;
+            }
+
+            else if(variable == "OUTPUT"){
+
+            }
+
+            else if(variable == "SAVE"){
+
+            }
+
+            else if(variable == "PLUS"){
+
+            }
+
+            else if(variable == "MINUS"){
+
+            }
+
+            else if(variable == "MULT"){
+
+            }
+
+            else if(variable == "INCRE"){
+
+            }
+
+            else if(variable == "DECRE"){
+
+            }
+
+            else if(variable == "EQUAL"){
+
+            }
+
+            else if(variable == "JUMP"){
+
+            }
+
+            else if(variable == "EQUAL"){
+
+            }
+
+            else if(variable == "IFTHEN"){
+
+            }
+
+            else if(variable == "LOADA"){
+
+            }
+
+            else if(variable == "PLUSA"){
+
+            }
+
+            else if(variable == "INCREA"){
+
+            }
+
+            else if(variable == "DECREA"){
+
+            }
+
+            else if(variable == "OUTPUTA"){
+
+            }
+
+            else {cout << "Wrong input";}
+
+
           }
 
 

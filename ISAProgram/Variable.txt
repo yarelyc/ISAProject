@@ -4,7 +4,7 @@ int y 5
 int l 85
 int num 86
 
+LOAD
 START
-
 INPUT S
 NEXT
