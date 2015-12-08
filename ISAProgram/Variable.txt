@@ -1,0 +1,10 @@
+int x 12
+int w 13
+int y 5
+int l 85
+int num 86
+
+START
+
+INPUT S
+NEXT
