@@ -8,7 +8,7 @@
 // Modifications:
 //
 // *******************************************************
-
+#include <sstream>
 #include <iostream>
 #include <unordered_map>
 #include <list>
@@ -18,6 +18,8 @@
 using namespace std;
 
 void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+
 int main(){
 
     unordered_map<string,int> intVariaMap; //the key: variable name, value: type value
@@ -40,6 +42,7 @@ int main(){
     loadInstructions(file, intVariaMap, intRegisMap);
     file.close();
 
+//finds your variables and values
      unordered_map<string,int>::const_iterator got = intVariaMap.find ("num");
 
       if ( got == intVariaMap.end() )
@@ -72,10 +75,10 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                     cout<<"int"<<endl;
                     if(variable.length() == 2 && variable[0] == 'R'){
                         //insert into register map
-                        intRegisMap.insert({variable, stoi(row)});
+                      // intRegisMap.insert({variable, stoi(row)});
                     }
                     else{
-                      intVariaMap.insert({variable,  stoi(row)});
+                    //  intVariaMap.insert({variable,  stoi(row)});
                     }
                     break;
                 case 'c':
@@ -92,23 +95,22 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             // cout << row << endl;
 
          }
+
           while (getline(file,row)){
 
-             cout<<row<<endl;
-             cout<<row.length()<<endl;
 
             first_index = row.find(' ');
             variable = row.substr(0, first_index);
-
             row = row.substr(first_index+1, row.length() - first_index);
 
             if(variable == "LOAD"){
 
-                cout << row << endl;
+
+                load(row, intVariaMap, intRegisMap);
             }
 
             else if(variable == "INPUT"){
-                 cout << row << endl;
+
             }
 
             else if(variable == "OUTPUT"){
@@ -175,12 +177,52 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
 
             }
 
-            else {cout << "Wrong input";}
+            else {cout << "Wrong input" << endl;}
 
 
           }
 
+}
+void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
 
 
+           int first_index = data.find(' ');
+           string register1 = data.substr(0 , first_index);
+           data = data.substr(first_index + 1, data.length() - first_index);
+
+
+
+           if(register1 == "R1"|| register1 == "R2"|| register1 == "R3"|| register1 == "R4"|| register1 == "R5"||
+              register1 == "R6"|| register1 == "R7"|| register1 == "R8"|| register1 == "R9"|| register1 == "R10"||
+              register1 == "R11"|| register1 == "R12"|| register1 == "R13"|| register1 == "R14"||
+              register1 == "R15"|| register1 == "R16"){
+
+               // cout << "yes" << endl;
+                 stringstream var(data);
+                 int dat;
+                 var >> dat;
+
+                //if((intRegisMap.find(register1, dat)== 0)
+                auto it = intVariaMap.find(data);
+                int num = 0;
+                if(it != intVariaMap.end())
+                        num = it -> second;
+
+                auto its = intRegisMap.find(register1);
+                int num1 = 0;
+                if(its != intRegisMap.end())
+                        num1 = its -> second;
+                else
+                    intRegisMap.insert({register1, num1});
+
+              }
+
+            else {
+                cout << "Register: " << register1 << " does not exits" << endl;
+            }
+
+
+            cout << data << endl;
+            cout << register1 << endl;
 
 }
