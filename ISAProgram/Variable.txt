@@ -7,4 +7,9 @@ int num 86
 START
 SAVE x w
 OUTPUT x
+PLUS R1 R2
+PLUS x y
+OUTPUT R1
+INCRE x
+OUTPUT x
 NEXT
