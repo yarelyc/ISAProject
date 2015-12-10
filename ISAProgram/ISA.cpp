@@ -5,7 +5,7 @@
 //
 // Author: Yarely Chino & Araceli
 // Created: 12/ 01/2015
-// Modifications:this is the project for CSS3
+// Modifications:
 // *******************************************************
 #include <sstream>
 #include <iostream>
