@@ -7,7 +7,7 @@
 // Created: 12/ 01/2015
 // Modifications:this is the project for CSS3
 // *******************************************************
-
+#include <sstream>
 #include <iostream>
 #include <unordered_map>
 #include <list>
@@ -17,6 +17,7 @@
 using namespace std;
 
 void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void output(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void plusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
@@ -25,6 +26,7 @@ void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
 void incr(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void decr(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+
 
 
 int main(){
@@ -48,6 +50,15 @@ int main(){
     }
     loadInstructions(file, intVariaMap, intRegisMap);
     file.close();
+
+
+//finds your variables and values
+     unordered_map<string,int>::const_iterator got = intVariaMap.find ("num");
+
+      if ( got == intVariaMap.end() )
+        cout << "not found";
+      else
+        cout << got->first << " is " << got->second;
 
 
     return EXIT_SUCCESS;
@@ -74,10 +85,10 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                     //int type variable declaration
                    if(variable.length() == 2 && variable[0] == 'R'){
                         //insert into register map
-                        intRegisMap.insert({variable, stoi(row)});
+                      // intRegisMap.insert({variable, stoi(row)});
                     }
                     else{
-                      intVariaMap.insert({variable,  stoi(row)});
+                    //  intVariaMap.insert({variable,  stoi(row)});
                     }
                     break;
                 case 'c':
@@ -92,15 +103,16 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             // cout << row << endl;
 
          }
+
           while (getline(file,row)){
 
 
             first_index = row.find(' ');
             variable = row.substr(0, first_index);
-
             row = row.substr(first_index+1, row.length() - first_index);
 
             if(variable == "LOAD"){
+                load(row, intVariaMap, intRegisMap);
 
             }
 
@@ -171,13 +183,46 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             else if(variable == "OUTPUTA"){
 
             }
-
-
-
-
+            else {cout << "Wrong input" << endl;}
           }
+void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
 
-}
+
+           int first_index = data.find(' ');
+           string register1 = data.substr(0 , first_index);
+           data = data.substr(first_index + 1, data.length() - first_index);
+
+
+
+           if(register1 == "R1"|| register1 == "R2"|| register1 == "R3"|| register1 == "R4"|| register1 == "R5"||
+              register1 == "R6"|| register1 == "R7"|| register1 == "R8"|| register1 == "R9"|| register1 == "R10"||
+              register1 == "R11"|| register1 == "R12"|| register1 == "R13"|| register1 == "R14"||
+              register1 == "R15"|| register1 == "R16"){
+
+               // cout << "yes" << endl;
+                 stringstream var(data);
+                 int dat;
+                 var >> dat;
+
+                //if((intRegisMap.find(register1, dat)== 0)
+                auto it = intVariaMap.find(data);
+                int num = 0;
+                if(it != intVariaMap.end())
+                        num = it -> second;
+
+                auto its = intRegisMap.find(register1);
+                int num1 = 0;
+                if(its != intRegisMap.end())
+                        num1 = its -> second;
+                else
+                    intRegisMap.insert({register1, num1});
+
+              }
+
+            else {
+                cout << "Register: " << register1 << " does not exits" << endl;
+            }
+
 
 void output(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
     //output will always have only one variable or register in the STR;
@@ -242,6 +287,8 @@ void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
      }
 
 
+            cout << data << endl;
+            cout << register1 << endl;
 
 }
 
