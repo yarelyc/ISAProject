@@ -1,5 +1,6 @@
 # depslib dependency file v1.0
-1449619539 source:c:\users\araceli\desktop\isacss3\isaproject\isaprogram\isa.cpp
+1449786577 source:c:\users\araceli\desktop\isacss3\isaproject\isaprogram\isa.cpp
+	<sstream>
 	<iostream>
 	<unordered_map>
 	<list>
@@ -8,6 +9,14 @@
 	<string>
 
 1449621303 source:/home/yaya/Desktop/ISAProject/ISAProgram/ISA.cpp
+	<iostream>
+	<unordered_map>
+	<list>
+	<cstdlib>
+	<fstream>
+	<string>
+
+1449767523 source:/home/juice/Desktop/ISAProject/ISAProgram/ISA.cpp
 	<iostream>
 	<unordered_map>
 	<list>

@@ -21,6 +21,13 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
 void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void output(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+void plusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+void minusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+void incr(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+void decr(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+
 
 
 int main(){
@@ -123,27 +130,27 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             }
 
             else if(variable == "PLUS"){
-
+                    plusS(row,intVariaMap, intRegisMap);
             }
 
             else if(variable == "MINUS"){
-
+                 minusS(row,intVariaMap, intRegisMap);
             }
 
             else if(variable == "MULT"){
-
+                 mult(row,intVariaMap, intRegisMap);
             }
 
             else if(variable == "INCRE"){
-
+                 incr(row,intVariaMap, intRegisMap);
             }
 
             else if(variable == "DECRE"){
-
+                 decr(row,intVariaMap, intRegisMap);
             }
 
             else if(variable == "EQUAL"){
-
+                equalL(row,intVariaMap, intRegisMap);
             }
 
             else if(variable == "JUMP"){
@@ -285,3 +292,240 @@ void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
             cout << register1 << endl;
 
 }
+
+void plusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
+
+    string first_variable;
+    int first_index = str.find(' ');
+    first_variable = str.substr(0, first_index);
+    str = str.substr(first_index+1, str.length() - first_index);
+    int num;
+
+
+
+    //second variable will be access to add to first
+      if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+        //access information from register
+        unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
+          if ( got == intRegisMap.end() )
+                num = 0;
+          else
+             num = got->second;
+
+      }
+      else{
+        //access information from variable
+      unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
+          if ( got == intVariaMap.end() )
+                num = 0;
+          else
+             num = got->second;
+        //save to register
+      }
+
+
+    //first variable will be access to add to first
+      if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
+        //save to variable
+       auto it = intRegisMap.find(first_variable);
+       if(it != intRegisMap.end())
+            it->second += num;
+       else{
+            intRegisMap.insert({first_variable, num});
+       }
+      }
+      else{
+        //save to variable
+       auto it = intVariaMap.find(first_variable);
+       if(it != intVariaMap.end())
+            it->second += num;
+    }
+}
+void minusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
+
+    string first_variable;
+    int first_index = str.find(' ');
+    first_variable = str.substr(0, first_index);
+    str = str.substr(first_index+1, str.length() - first_index);
+    int num;
+
+
+
+    //second variable will be access to add to first
+      if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+        //access information from register
+        unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
+          if ( got == intRegisMap.end() )
+                num = 0;
+          else
+             num = got->second;
+
+      }
+      else{
+        //access information from variable
+      unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
+          if ( got == intVariaMap.end() )
+                num = 0;
+          else
+             num = got->second;
+        //save to register
+      }
+
+
+    //first variable will be access to add to first
+      if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
+        //save to variable
+       auto it = intRegisMap.find(first_variable);
+       if(it != intRegisMap.end())
+            it->second = it->second - num;
+       else{
+            intRegisMap.insert({first_variable, 0 - num});
+       }
+      }
+      else{
+        //save to variable
+       auto it = intVariaMap.find(first_variable);
+       if(it != intVariaMap.end())
+            it->second = it->second - num;
+    }
+}
+void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
+
+    string first_variable;
+    int first_index = str.find(' ');
+    first_variable = str.substr(0, first_index);
+    str = str.substr(first_index+1, str.length() - first_index);
+    int num;
+
+
+
+    //second variable will be access to add to first
+      if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+        //access information from register
+        unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
+          if ( got == intRegisMap.end() )
+                num = 0;
+          else
+             num = got->second;
+
+      }
+      else{
+        //access information from variable
+      unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
+          if ( got == intVariaMap.end() )
+                num = 0;
+          else
+             num = got->second;
+        //save to register
+      }
+
+
+    //first variable will be access to add to first
+      if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
+        //save to variable
+       auto it = intRegisMap.find(first_variable);
+       if(it != intRegisMap.end())
+            it->second *= num;
+       else{
+            intRegisMap.insert({first_variable, 0});
+       }
+      }
+      else{
+        //save to variable
+       auto it = intVariaMap.find(first_variable);
+       if(it != intVariaMap.end())
+            it->second *= num;
+    }
+}
+
+void incr(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
+
+      //first variable will be access to add to first
+      if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+        //save to variable
+       auto it = intRegisMap.find(str);
+       if(it != intRegisMap.end())
+            it->second++;
+       else{
+            intRegisMap.insert({str, 0});
+       }
+      }
+      else{
+        //save to variable
+       auto it = intVariaMap.find(str);
+       if(it != intVariaMap.end())
+            it->second++;
+    }
+
+
+}
+void decr(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
+    //first variable will be access to add to first
+      if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+        //save to variable
+       auto it = intRegisMap.find(str);
+       if(it != intRegisMap.end())
+            it->second--;
+       else{
+            intRegisMap.insert({str, 0});
+       }
+      }
+      else{
+        //save to variable
+       auto it = intVariaMap.find(str);
+       if(it != intVariaMap.end())
+            it->second--;
+    }
+
+}
+
+bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
+
+ string first_variable;
+    int first_index = str.find(' ');
+    first_variable = str.substr(0, first_index);
+    str = str.substr(first_index+1, str.length() - first_index);
+    int num;
+
+
+
+    //second variable will be access to add to first
+      if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+        //access information from register
+        unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
+          if ( got == intRegisMap.end() )
+                num = 0;
+          else
+             num = got->second;
+
+      }
+      else{
+        //access information from variable
+      unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
+          if ( got == intVariaMap.end() )
+                num = 0;
+          else
+             num = got->second;
+        //save to register
+      }
+
+
+    //first variable will be access to add to first
+      if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
+        //save to variable
+       auto it = intRegisMap.find(first_variable);
+
+       if(it != intRegisMap.end()){
+            return (it->second == num);
+       }
+
+      }
+      else{
+        //save to variable
+       auto it = intVariaMap.find(first_variable);
+       if(it != intVariaMap.end()){
+             return (it->second == num);
+       }
+    }
+}
+
