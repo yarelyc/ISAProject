@@ -19,6 +19,9 @@ using namespace std;
 
 void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+void output(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+
 
 int main(){
 
@@ -42,6 +45,7 @@ int main(){
     loadInstructions(file, intVariaMap, intRegisMap);
     file.close();
 
+
 //finds your variables and values
      unordered_map<string,int>::const_iterator got = intVariaMap.find ("num");
 
@@ -49,6 +53,7 @@ int main(){
         cout << "not found";
       else
         cout << got->first << " is " << got->second;
+
 
     return EXIT_SUCCESS;
 }
@@ -61,7 +66,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
 
          while (getline(file,row) && row != "START")
          {
-            cout<<"end:"<<row<<endl;
+
             first_index = row.find(' ');
             first_letter = row[0];
             row = row.substr(first_index+1, row.length() - first_index);
@@ -72,8 +77,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             switch(first_letter){
                 case 'i':
                     //int type variable declaration
-                    cout<<"int"<<endl;
-                    if(variable.length() == 2 && variable[0] == 'R'){
+                   if(variable.length() == 2 && variable[0] == 'R'){
                         //insert into register map
                       // intRegisMap.insert({variable, stoi(row)});
                     }
@@ -83,11 +87,9 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                     break;
                 case 'c':
                     //char type variable declaration
-                    cout<<"char"<<endl;
                     break;
                 case 'l':
-                    //link list type variable declaration
-                    cout<<"link"<<endl;
+                    //link list type variable declaratio
                     break;
                  default :
                         cout<<endl;
@@ -104,9 +106,8 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             row = row.substr(first_index+1, row.length() - first_index);
 
             if(variable == "LOAD"){
-
-
                 load(row, intVariaMap, intRegisMap);
+
             }
 
             else if(variable == "INPUT"){
@@ -114,11 +115,11 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             }
 
             else if(variable == "OUTPUT"){
-
+                output(row,intVariaMap, intRegisMap);
             }
 
             else if(variable == "SAVE"){
-
+                save(row, intVariaMap, intRegisMap);
             }
 
             else if(variable == "PLUS"){
@@ -176,13 +177,8 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             else if(variable == "OUTPUTA"){
 
             }
-
             else {cout << "Wrong input" << endl;}
-
-
           }
-
-}
 void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
 
 
@@ -220,6 +216,69 @@ void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<str
             else {
                 cout << "Register: " << register1 << " does not exits" << endl;
             }
+
+
+void output(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
+    //output will always have only one variable or register in the STR;
+
+    if((str.length() == 3 || str.length() == 2) && str[0] == 'R'){
+    //this means we output information from the register
+    unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
+
+      if ( got == intRegisMap.end() )
+        cout << "0"<<endl;
+      else
+        cout << got->second<<endl;
+    }
+    else{
+    //this means that it saves in the variable
+     unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
+
+      if ( got == intVariaMap.end() )
+        cout << "0"<<endl;
+      else
+        cout << got->second<<endl;
+
+    }
+
+
+}
+void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
+    //saving to a variable from variable or register
+
+    string variable;
+    int first_index = str.find(' ');
+    variable = str.substr(0, first_index);
+    str = str.substr(first_index+1, str.length() - first_index);
+    int num;
+
+    if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+        //access information from register
+        unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
+          if ( got == intRegisMap.end() )
+                num = 0;
+          else
+             num = got->second;
+
+      }
+      else{
+        //access information from variable
+      unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
+          if ( got == intVariaMap.end() )
+                num = 0;
+          else
+             num = got->second;
+        //save to register
+      }
+     if(!((variable.length() == 3 || variable.length() == 2) && variable[0] == 'R')){
+      //save to variable
+       auto it = intVariaMap.find(variable);
+       if(it != intVariaMap.end())
+            it->second = num;
+     }
+     else{
+        cout<<"Wrong input! Can only save to variable"<<endl;
+     }
 
 
             cout << data << endl;

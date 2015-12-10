@@ -5,6 +5,11 @@ int l 85
 int num 86
 
 START
+<<<<<<< HEAD
 LOAD R1 y
 INPUT S
+=======
+SAVE x w
+OUTPUT x
+>>>>>>> 5cdc441d9fea5a715a427b7263611bd2b6709257
 NEXT

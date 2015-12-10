@@ -1,0 +1,3 @@
+int x 21
+int t 25
+int num 6
