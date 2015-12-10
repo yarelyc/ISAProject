@@ -5,8 +5,7 @@
 //
 // Author: Yarely Chino & Araceli
 // Created: 12/ 01/2015
-// Modifications:
-//
+// Modifications:this is the project for CSS3
 // *******************************************************
 
 #include <iostream>
@@ -462,7 +461,6 @@ bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
         //save to register
       }
 
-
     //first variable will be access to add to first
       if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
         //save to variable
@@ -481,4 +479,3 @@ bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
        }
     }
 }
-
