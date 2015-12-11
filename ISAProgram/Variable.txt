@@ -5,19 +5,8 @@ int l 85
 int num 86
 
 START
-<<<<<<< HEAD
 LOAD R1 y
-INPUT S
-=======
-SAVE x w
-OUTPUT x
-<<<<<<< HEAD
->>>>>>> 5cdc441d9fea5a715a427b7263611bd2b6709257
-=======
-PLUS R1 R2
-PLUS x y
+STOP
 OUTPUT R1
-INCRE x
-OUTPUT x
->>>>>>> 1ec3cf046e3e3c9f28fd5d03f5810825541f46b3
-NEXT
+GREATER R1 R2
+LESS R1 R2
