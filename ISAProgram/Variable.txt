@@ -1,8 +1,19 @@
-int x 12
+int a 12
 int w 13
 int y 5
 int l 85
 int num 86
+link int x
+     int 0
+     int 4
+     int 6
+     int 8
+     end
+link int y
+     int 4
+     int 6
+     end
+int t 4
 
 START
 LOAD R1 y
@@ -10,3 +21,5 @@ STOP
 OUTPUT R1
 GREATER R1 R2
 LESS R1 R2
+
+
