@@ -83,7 +83,6 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                    if(variable.length() == 2 && variable[0] == 'R'){
 
                         //insert into register map
-<<<<<<< HEAD
                         stringstream rows(row);
                         int rowi;
                         rows >> rowi;
@@ -96,12 +95,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                         rows >> rowi;
                         intVariaMap.insert({variable, rowi});
                     //  intVariaMap.insert({variable,  stoi(row)});
-=======
-                       intRegisMap.insert({variable, stoi(row)});
-                    }
-                    else{
-                    intVariaMap.insert({variable,  stoi(row)});
->>>>>>> 97d433c2465fb956ffe663437caba008db40a882
+
                     }
                     break;
                 case 'c':
@@ -240,11 +234,11 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                 EXIT_SUCCESS;
             }
 
-            else {cout << "Wrong input" << endl;}
+            else {
+            cout << "Error: wrong input " <<variable<<endl;
+            }
           }
 }
-<<<<<<< HEAD
-=======
 
 void insertToLink(string key, int value, unordered_map<string, list<int> >& intAddressLink){
 
@@ -270,7 +264,7 @@ void insertToLink(string key, int value, unordered_map<string, list<int> >& intA
 
 
 }
->>>>>>> 97d433c2465fb956ffe663437caba008db40a882
+
 void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
 
 
@@ -285,44 +279,31 @@ void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<str
               register1 == "R15"|| register1 == "R16"){
                // cout << "yes" << endl;
 
-                 stringstream var(data);
-                 int dat;
-                 var >> dat;
 
                 //loads variable hashmap
                 auto it = intVariaMap.find(data);
                 int num = 0;
-<<<<<<< HEAD
-                if(it != intVariaMap.end()) //variable carries second
+                if(it != intVariaMap.end()) //if found, the second variable carries int
                         num = it -> second;
-
-                auto its = intRegisMap.find(register1);
-
-                if(its != intRegisMap.end()) //register
-                       its -> second = num; //value carries input
-                       //
-=======
-                if(it != intVariaMap.end()){
-                    num = it -> second;
+                else{
+                    cout<<"Error: undefined variable: "<<data<<endl;
+                    exit(1);
                 }
-                auto its = intRegisMap.find(register1);
-                if(its != intRegisMap.end())
-                        its -> second = num;
->>>>>>> 97d433c2465fb956ffe663437caba008db40a882
-                else
-                    intRegisMap.insert({register1, num});
 
-              }
+                //saving number to register
+                auto its = intRegisMap.find(register1);
+                if(its != intRegisMap.end()) //if register is found
+                       its -> second = num; //value carries input
+                else{
+                    intRegisMap.insert({register1,num});
+                }
+            }
 
             else {
                 cout << "Register: " << register1 << " does not exits" << endl;
-<<<<<<< HEAD
+                exit(1);
             }
-}
-=======
->>>>>>> 97d433c2465fb956ffe663437caba008db40a882
 
-            }
 
 }
 void output(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
@@ -389,7 +370,8 @@ void input(string register1, unordered_map<string,int>& intVariaMap, unordered_m
             it->second = dat;
         }
         else{
-             intVariaMap.insert({register1,dat});
+           cout<<"Error: undefined variable: "<<register1<<endl;
+           exit(0);
         }
 
 
@@ -405,7 +387,7 @@ void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
     str = str.substr(first_index+1, str.length() - first_index);
     int num;
 
-    if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+    if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){//if register
         //access information from register
         unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
           if ( got == intRegisMap.end() )
@@ -417,8 +399,10 @@ void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
       else{
         //access information from variable
       unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
-          if ( got == intVariaMap.end() )
-                num = 0;
+          if ( got == intVariaMap.end() ){
+           cout<<"Error: undefined variable: "<<str<<endl;
+            exit(1);
+          }
           else
              num = got->second;
         //save to register
@@ -428,18 +412,15 @@ void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
        auto it = intVariaMap.find(variable);
        if(it != intVariaMap.end())
             it->second = num;
+        else{
+            cout<<"Error: undefined variable: "<<variable<<endl;
+            exit(1);
+        }
      }
      else{
-        //cout<<"Wrong input! Can only save to variable"<<endl;
+        cout<<"Error: undefined variable or can't save to register: "<<variable<<endl;
+        exit(1);
      }
-
-<<<<<<< HEAD
-
-          //  cout << data << endl;
-          //  cout << register1 << endl;
-
-=======
->>>>>>> 97d433c2465fb956ffe663437caba008db40a882
 }
 
 void plusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
@@ -452,11 +433,13 @@ void plusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<str
 
 
 
+
     //second variable will be access to add to first
+    //TODO::: CHANGE THE CHECK METHOD FOR REGISTERS -> R1, R2,R3, R4
       if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
         //access information from register
         unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
-          if ( got == intRegisMap.end() )
+          if ( got == intRegisMap.end() )//not found
                 num = 0;
           else
              num = got->second;
@@ -465,8 +448,10 @@ void plusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<str
       else{
         //access information from variable
       unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
-          if ( got == intVariaMap.end() )
-                num = 0;
+          if ( got == intVariaMap.end() ){
+             cout<<"Error: undefined variable: "<<str<<endl;
+            exit(1);
+          }
           else
              num = got->second;
         //save to register
@@ -501,6 +486,7 @@ void minusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
 
 
     //second variable will be access to add to first
+    //TODO: ARACELI change to check registers and exit if its not found
       if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
         //access information from register
         unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
@@ -513,13 +499,14 @@ void minusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
       else{
         //access information from variable
       unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
-          if ( got == intVariaMap.end() )
-                num = 0;
+          if ( got == intVariaMap.end() ){
+             cout<<"Error: undefined variable: "<<str<<endl;
+            exit(1);
+          }
           else
              num = got->second;
         //save to register
       }
-
 
     //first variable will be access to add to first
       if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
@@ -528,7 +515,7 @@ void minusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
        if(it != intRegisMap.end())
             it->second = it->second - num;
        else{
-            intRegisMap.insert({first_variable, 0 - num});
+            intRegisMap.insert({first_variable, (num*(-1))});
        }
       }
       else{
@@ -536,6 +523,10 @@ void minusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
        auto it = intVariaMap.find(first_variable);
        if(it != intVariaMap.end())
             it->second = it->second - num;
+        else{
+         cout<<"Error: undefined variable: "<<first_variable<<endl;
+            exit(1);
+        }
     }
 }
 void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
@@ -549,6 +540,7 @@ void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
 
 
     //second variable will be access to add to first
+    //TODO: ARACELI change to check registers and exit if its not found
       if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
         //access information from register
         unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
@@ -561,8 +553,10 @@ void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
       else{
         //access information from variable
       unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
-          if ( got == intVariaMap.end() )
-                num = 0;
+          if ( got == intVariaMap.end() ){
+           cout<<"Error: undefined variable: "<<str<<endl;
+            exit(1);
+          }
           else
              num = got->second;
         //save to register
@@ -570,6 +564,7 @@ void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
 
 
     //first variable will be access to add to first
+     //TODO: ARACELI change to check registers and exit if its not found
       if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
         //save to variable
        auto it = intRegisMap.find(first_variable);
@@ -584,12 +579,18 @@ void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
        auto it = intVariaMap.find(first_variable);
        if(it != intVariaMap.end())
             it->second *= num;
+        else{
+
+         cout<<"Error: undefined variable: "<<first_variable<<endl;
+            exit(1);
+        }
     }
 }
 
 void incr(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
 
       //first variable will be access to add to first
+       //TODO: ARACELI change to check registers and exit if its not found
       if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
         //save to variable
        auto it = intRegisMap.find(str);
@@ -604,12 +605,18 @@ void incr(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
        auto it = intVariaMap.find(str);
        if(it != intVariaMap.end())
             it->second++;
+        else{
+
+         cout<<"Error: undefined variable: "<<str<<endl;
+            exit(1);
+        }
     }
 
 
 }
 void decr(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
     //first variable will be access to add to first
+      //TODO: ARACELI change to check registers and exit if its not found
       if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
         //save to variable
        auto it = intRegisMap.find(str);
@@ -624,6 +631,11 @@ void decr(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
        auto it = intVariaMap.find(str);
        if(it != intVariaMap.end())
             it->second--;
+        else{
+
+         cout<<"Error: undefined variable: "<<str<<endl;
+            exit(1);
+        }
     }
 
 }
@@ -651,8 +663,10 @@ bool equalL(string str, string str2, unordered_map<string,int>& intVariaMap, uno
       else{
         //access information from variable
       unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
-          if ( got == intVariaMap.end() )
-                num = 0;
+          if ( got == intVariaMap.end() ){
+             cout<<"Error: undefined variable: "<<str<<endl;
+            exit(1);
+        }
           else
              num = got->second;
         //save to register
@@ -673,9 +687,14 @@ bool equalL(string str, string str2, unordered_map<string,int>& intVariaMap, uno
        auto it = intVariaMap.find(first_variable);
        if(it != intVariaMap.end()){
              return (it->second == num);
+        }
+        else{
+         cout<<"Error: undefined variable: "<<str<<endl;
+            exit(1);
+        }
+
        }
     }
-}
 
 bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
 
@@ -699,13 +718,14 @@ bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_m
         else{
         //access information from variable
       unordered_map<string,int>::const_iterator variable = intVariaMap.find (str);
-                if ( variable == intVariaMap.end() )
-                        num = 0;
+                if ( variable == intVariaMap.end() ){
+                    cout<<"Error: undefined variable: "<<str<<endl;
+                    exit(1);
+                }
                 else
                     num = variable->second;
         //save to register
-            }
-
+        }
 
     //first variable will be access to add to first
         if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
@@ -713,6 +733,11 @@ bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_m
                 auto it = intRegisMap.find(first_variable);
                 if(it != intRegisMap.end()){
                     return (it->second > num);
+                }
+                else
+                {
+                    cout<<"Error: undefined variable: "<<str<<endl;
+                    exit(1);
                 }
 
         }
@@ -723,6 +748,10 @@ bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_m
             if(it != intVariaMap.end()){
                 return (it->second > num);
             }
+            else{
+            cout<<"Error: undefined variable: "<<str<<endl;
+            exit(1);
+        }
     }
     //first variable will be access to add to first
 }
@@ -748,8 +777,10 @@ bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<s
         else{
         //access information from variable
                 unordered_map<string,int>::const_iterator variable = intVariaMap.find (str);
-                if ( variable == intVariaMap.end() )
-                    num = 0;
+                if ( variable == intVariaMap.end() ){
+                    cout<<"Error: undefined variable: "<<str<<endl;
+                    exit(1);
+                }
                 else
                     num = variable->second;
         //save to register
@@ -770,7 +801,11 @@ bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<s
             auto it = intVariaMap.find(first_variable);
             if(it != intVariaMap.end()){
                 return (it->second < num);
-       }
+            }
+             else{
+            cout<<"Error: undefined variable: "<<str<<endl;
+            exit(1);
+        }
     }
     //first variable will be access to add to first
 

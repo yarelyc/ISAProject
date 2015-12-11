@@ -1,25 +1,21 @@
 int a 12
-int w 13
+int w 12
 int y 5
 int l 85
 int num 86
-link int x
+link int arr
      int 0
      int 4
      int 6
      int 8
      end
-link int y
+link int arr
      int 4
      int 6
      end
 int t 4
 
 START
-LOAD R1 y
+EQUAL w a
+OUTPUT w
 STOP
-OUTPUT R1
-GREATER R1 R2
-LESS R1 R2
-
-
