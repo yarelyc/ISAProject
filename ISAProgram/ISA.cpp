@@ -16,9 +16,9 @@
 #include <string>
 using namespace std;
 
-void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,  unordered_map<string, list<int> >& intAddressLink);
+void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,  unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
 void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
-void insertToLink(string key, int value, unordered_map<string, list<int> >& intAddressLink);
+void insertToLink(string key, int value, unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
 void input(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void output(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
@@ -45,6 +45,9 @@ int main(){
     unordered_map<string, list<int> > intAddressLink; //linkList for memory
     //list<char> charMemoryLink; //linkList for memory
 
+    //hashmap with key as strings and value of list int iterators
+    unordered_map<string, list<int>::iterator > intIterators;
+
 
 
     ifstream file;
@@ -53,13 +56,13 @@ int main(){
         cout<<"Error opening file\n";
         exit(1);
     }
-    loadInstructions(file, intVariaMap, intRegisMap, intAddressLink);
+    loadInstructions(file, intVariaMap, intRegisMap, intAddressLink,  intIterators);
     file.close();
 
 
     return EXIT_SUCCESS;
 }
-void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,  unordered_map<string, list<int> >& intAddressLink)
+void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,  unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator >& intIterator)
 {
         int first_index;
         string variable;
@@ -113,22 +116,22 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                                 isLink = false;
                             }
                             else{
-                            first_index = row.find("int ");//"    int 25"
-                            row = row.substr(first_index+4,row.length()-(first_index + 4));
-                            if(row.length() == 1 && row[0] == '0'){
-                                //means its a zero
-                               insertToLink(key,0,intAddressLink);
-                            }
-                            else{
-                                stringstream var(row);
-                                int dat;
-                                var >> dat;
-                                if(var != 0)
-                                    insertToLink(key,dat,intAddressLink);
-                                else{
-                                    cout<<"Error inserting to array, cannot convert to int: " <<row<<endl;
-                                    exit(1);
+                                first_index = row.find("int ");//"    int 25"
+                                row = row.substr(first_index+4,row.length()-(first_index + 4));
+                                if(row.length() == 1 && row[0] == '0'){
+                                    //means its a zero
+                                   insertToLink(key,0,intAddressLink,intIterator);
                                 }
+                                else{
+                                    stringstream var(row);
+                                    int dat;
+                                    var >> dat;
+                                    if(var != 0)
+                                        insertToLink(key,dat,intAddressLink, intIterator);
+                                    else{
+                                        cout<<"Error inserting to array, cannot convert to int: " <<row<<endl;
+                                        exit(1);
+                                    }
                             }
                             }
 
@@ -240,7 +243,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
           }
 }
 
-void insertToLink(string key, int value, unordered_map<string, list<int> >& intAddressLink){
+void insertToLink(string key, int value, unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator){
 
 
     list<int> new_list;
@@ -251,15 +254,26 @@ void insertToLink(string key, int value, unordered_map<string, list<int> >& intA
      new_list = it->second;
      new_list.push_back(value);
      it->second = new_list;
+    list<int>::iterator it = new_list.begin();
+
+    auto ptr = intIterator.find(key);
+    if(ptr != intIterator.end()){
+        ptr->second = it;
+        //cout<<*((ptr->second))<<"data"<<value<<endl;
+        //advance(ptr->second,1);
+        //cout<<*(ptr->second)<<endl;
+       // cout<<*(advance(ptr->second,1))<<"new"<<endl;
+    }
      /*
        for (list<int>::iterator its = new_list.begin(); its!=new_list.end(); ++its)
         std::cout << ' ' << *its<<endl;*/
     }
     else{
     //key wasn't found
-    new_list.push_front(value);
+    new_list.push_back(value);
+     list<int>::iterator it = new_list.begin();
+     intIterator.insert({key, it});
     intAddressLink.insert({key, new_list});
-
     }
 
 
@@ -810,3 +824,5 @@ bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<s
     //first variable will be access to add to first
 
 }
+
+void outputA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);

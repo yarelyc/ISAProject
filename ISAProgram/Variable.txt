@@ -4,18 +4,15 @@ int y 5
 int l 85
 int num 86
 link int arr
-     int 0
+     int 1
+     int 2
+     int 3
      int 4
-     int 6
-     int 8
-     end
-link int arr
-     int 4
+     int 5
      int 6
      end
 int t 4
 
 START
 EQUAL w a
-OUTPUT w
 STOP
