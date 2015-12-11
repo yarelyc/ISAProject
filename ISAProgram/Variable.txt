@@ -1,23 +1,13 @@
-int x 12
+int a 12
 int w 13
-int y 5
-int l 85
-int num 86
-
-START
-<<<<<<< HEAD
-LOAD R1 y
-INPUT S
-=======
-SAVE x w
-OUTPUT x
-<<<<<<< HEAD
->>>>>>> 5cdc441d9fea5a715a427b7263611bd2b6709257
-=======
-PLUS R1 R2
-PLUS x y
-OUTPUT R1
-INCRE x
-OUTPUT x
->>>>>>> 1ec3cf046e3e3c9f28fd5d03f5810825541f46b3
-NEXT
+link int x
+     int 0
+     int 4
+     int 6
+     int 8
+     end
+link int y
+     int 4
+     int 6
+     end
+int t 4
