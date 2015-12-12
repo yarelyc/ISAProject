@@ -30,8 +30,8 @@ void decr(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
 bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 bool greaterThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
-
-
+void loadA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
+void outputA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
 
 int main(){
 
@@ -132,6 +132,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                                         cout<<"Error inserting to array, cannot convert to int: " <<row<<endl;
                                         exit(1);
                                     }
+
                             }
                             }
 
@@ -207,7 +208,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             }
 
             else if(variable == "LOADA"){
-
+            loadA(row,intVariaMap, intRegisMap, intAddressLink, intIterator);
             }
 
             else if(variable == "PLUSA"){
@@ -221,9 +222,15 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             else if(variable == "DECREA"){
 
             }
+            else if(variable == "MOVEUPA"){
+
+            }
+          else if(variable == "MOVEDOWNA"){
+
+            }
 
             else if(variable == "OUTPUTA"){
-
+                outputA(row,intVariaMap, intRegisMap, intAddressLink, intIterator);
             }
 
             else if(variable == "GREATER"){
@@ -266,7 +273,34 @@ void insertToLink(string key, int value, unordered_map<string, list<int> >& intA
     }
      /*
        for (list<int>::iterator its = new_list.begin(); its!=new_list.end(); ++its)
-        std::cout << ' ' << *its<<endl;*/
+        std::cout << ' ' << *its<<endl;
+
+
+         auto ptrx = intIterator.find(key);
+                                     //this checks if third variable is a link
+                                     if(ptrx != intIterator.end()){
+                                        //PTR IS AN ITERATOR FOR MY HASHMAHPS OF ITERATORS
+
+
+
+
+
+                                         auto its = intAddressLink.find(key);
+                                         //this checks if third variable is a link
+                                         if(its != intAddressLink.end()){
+                                            list<int> link;
+                                               for (list<int>::iterator it = (its->second).begin(); it!=(its->second).end(); ++it){
+
+                                                   cout<<*(ptrx->second)<<endl;
+                                                   std::cout << *it<<endl;
+                                                  advance(ptrx->second,1);
+                                               }
+
+
+                                            cout<<endl;
+                                         }
+                                    }
+                                    */
     }
     else{
     //key wasn't found
@@ -825,4 +859,65 @@ bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<s
 
 }
 
-void outputA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+void loadA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator){
+
+    string first_variable;
+    int first_index = str.find(' ');
+    first_variable = str.substr(0, first_index);
+    str = str.substr(first_index+1, str.length() - first_index);
+    int num;
+
+     auto it = intIterator.find(str);
+     //this checks if third variable is a link
+     if(it != intIterator.end()){
+        num = *(it->second);
+    }
+    else{
+        cout<<"Error: undefined link: "<<str<<endl;
+        exit(1);
+    }
+
+    //checks if
+     if(first_variable == "R1"|| first_variable == "R2"|| first_variable == "R3"|| first_variable == "R4"|| first_variable == "R5"||
+              first_variable == "R6"|| first_variable == "R7"|| first_variable == "R8"|| first_variable == "R9"|| first_variable == "R10"||
+              first_variable == "R11"|| first_variable == "R12"|| first_variable == "R13"|| first_variable == "R14"||
+              first_variable == "R15"|| first_variable == "R16"){
+               // cout << "yes" << endl;
+
+        auto it = intRegisMap.find(first_variable);
+
+        if(it != intRegisMap.end()){
+            //it was found
+            it->second = num;
+        }
+        else{
+            intRegisMap.insert({first_variable, num});
+        }
+
+    }
+    else{
+        cout<<"Error: undefined register: "<<first_variable<<endl;
+         exit(1);
+        }
+}
+
+void outputA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator){
+    string first_variable;
+    int first_index = str.find(' ');
+    first_variable = str.substr(0, first_index);
+    str = str.substr(first_index+1, str.length() - first_index);
+
+     auto it = intIterator.find(str);
+     //this checks if third variable is a link
+     if(it != intIterator.end()){
+        cout<<*(it->second);
+
+    }
+    else{
+        cout<<"Error: undefined link: "<<str<<endl;
+        exit(1);
+    }
+
+}
+
+
