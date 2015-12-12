@@ -18,7 +18,8 @@ using namespace std;
 
 void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,  unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
 void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
-void insertToLink(string key, int value, unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
+void insertToLink(string key, int value, unordered_map<string, list<int> >& intAddressLink,
+                  unordered_map<string, list<int>::iterator> & intIterator);
 void input(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void output(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
@@ -30,7 +31,10 @@ void decr(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
 bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 bool greaterThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
-
+void moveupA(string key,unordered_map<string, list<int> >& intAddressLink,
+                  unordered_map<string, list<int>::iterator> & intIterator);
+void movedownA(string key,unordered_map<string, list<int> >& intAddressLink,
+                  unordered_map<string, list<int>::iterator> & intIterator);
 
 
 int main(){
@@ -62,7 +66,8 @@ int main(){
 
     return EXIT_SUCCESS;
 }
-void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,  unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator >& intIterator)
+void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,  unordered_map<string, list<int> >& intAddressLink,
+                      unordered_map<string, list<int>::iterator >& intIterator)
 {
         int first_index;
         string variable;
@@ -214,12 +219,15 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
 
             }
 
-            else if(variable == "INCREA"){
+            else if(variable == "MOVEUPA"){
 
+                   // cout << row << endl;
+                   moveupA(row,intAddressLink, intIterator);
             }
 
-            else if(variable == "DECREA"){
+            else if(variable == "MOVEDOWNA"){
 
+                movedownA(row,intAddressLink, intIterator);
             }
 
             else if(variable == "OUTPUTA"){
@@ -234,8 +242,9 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
 
             }
             else if(variable == "STOP"){
-                EXIT_SUCCESS;
+                exit(0);
             }
+
 
             else {
             cout << "Error: wrong input " <<variable<<endl;
@@ -249,32 +258,37 @@ void insertToLink(string key, int value, unordered_map<string, list<int> >& intA
     list<int> new_list;
 
     auto it = intAddressLink.find(key);
-    if(it != intAddressLink.end()){
-    //found key
-     new_list = it->second;
-     new_list.push_back(value);
-     it->second = new_list;
-    list<int>::iterator it = new_list.begin();
+        if(it != intAddressLink.end()){
+                    //found key
+                new_list = it->second;
+                new_list.push_back(value);
+                it->second = new_list;
+                auto ptr = intIterator.find(key);
 
-    auto ptr = intIterator.find(key);
-    if(ptr != intIterator.end()){
-        ptr->second = it;
-        //cout<<*((ptr->second))<<"data"<<value<<endl;
-        //advance(ptr->second,1);
-        //cout<<*(ptr->second)<<endl;
-       // cout<<*(advance(ptr->second,1))<<"new"<<endl;
-    }
-     /*
-       for (list<int>::iterator its = new_list.begin(); its!=new_list.end(); ++its)
-        std::cout << ' ' << *its<<endl;*/
-    }
-    else{
-    //key wasn't found
-    new_list.push_back(value);
-     list<int>::iterator it = new_list.begin();
-     intIterator.insert({key, it});
-    intAddressLink.insert({key, new_list});
-    }
+            if(ptr != intIterator.end()){
+            //it is the iterator for the linkedlist
+            //ptr is the iterator for our iterator hashmap
+                    ptr->second = (it->second).begin();
+                }
+
+            else{
+                cout << "Error:"<<endl;
+                exit(1);
+            }
+
+             //  for (list<int>::iterator its = new_list.begin(); its!=new_list.end(); ++its)
+               // std::cout << 'w' << *its<<endl;
+        }
+
+        else{
+    //key wasn't found create a new linkedlist
+            new_list.push_back(value);
+            list<int>::iterator it = new_list.begin();
+
+            //cout << *(new_list.begin());
+            intIterator.insert({key, new_list.begin()});
+            intAddressLink.insert({key, new_list});
+        }
 
 
 }
@@ -826,3 +840,54 @@ bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<s
 }
 
 void outputA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+
+void moveupA(string key, unordered_map<string, list<int> >& intAddressLink,
+                  unordered_map<string, list<int>::iterator> & intIterator){
+
+        auto it = intAddressLink.find(key);
+        if(it != intAddressLink.end()){
+
+            list<int>::iterator its = (it->second).begin();
+            auto ptr = intIterator.find(key);
+            // advance(ptr->second,1);
+            if(ptr != intIterator.end()){
+
+                cout << *(ptr->second) << endl;
+                for( list<int>::iterator its = (it->second).begin(); its != (it->second).end(); its++){
+                if(its == ptr->second){
+                    advance(its,1);
+                    ptr->second = its;
+                }
+              }
+            }
+            else
+                cout << "Error: Accessing the array "<<key << endl;
+    }
+    else
+        cout << "Error: Item was not defined "<<key << endl;
+}
+void movedownA(string key,unordered_map<string, list<int> >& intAddressLink,
+                  unordered_map<string, list<int>::iterator> & intIterator){
+
+
+           auto it = intAddressLink.find(key);
+            if(it != intAddressLink.end()){
+
+                list<int>::iterator its = (it->second).begin();
+                auto ptr = intIterator.find(key);
+                // advance(ptr->second,1);
+                if(ptr != intIterator.end()){
+
+
+                    for( list<int>::iterator its = (it->second).begin(); its != (it->second).end(); its++){
+                    if(its == ptr->second){
+                        ptr->second = prev(its);
+                    }
+                  }
+                }
+                else
+                    cout << "Error: Accessing the array "<<key << endl;
+        }
+        else
+            cout << "Error: Item was not defined "<<key << endl;
+}
