@@ -1,4 +1,4 @@
-int a 12
+int counter 0
 int w 12
 int y 5
 int l 85
@@ -14,9 +14,10 @@ link int arr
 int t 4
 
 START
-INPUT R1
-LESS R1 w
-INPUT R2
-PLUS R2 R1
-OUTPUT R2
+CLEARALL
+INPUT counter
+DECRE counter
+OUTPUT counter
+INPUT num
+PLUS R1 num
 STOP
