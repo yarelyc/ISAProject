@@ -294,7 +294,10 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             }
 
             else {
-            cout << "Error: wrong input \"" <<variable<<"\""<<endl;
+                if(variable != ""){
+                     cout << "Error :"<<variable<<endl;
+                     exit(1);
+                }
             }
         }
 
@@ -416,6 +419,7 @@ void output(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
 
 void input(string register1, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
     string num;
+    cout<<"Enter "<<register1<<": ";
     cin>>num;
 
 
