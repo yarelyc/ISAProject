@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <string>
+
 using namespace std;
 
 void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
@@ -46,7 +47,11 @@ void increA(string key,unordered_map<string, list<int> >& intAddressLink,
                   unordered_map<string, list<int>::iterator> & intIterator);
 void decreA(string key,unordered_map<string, list<int> >& intAddressLink,
                   unordered_map<string, list<int>::iterator> & intIterator);
+
 void jump(string jump_name,ifstream& file);
+
+
+void clearAll(unordered_map<string,int>& intRegisMap);
 
 int main(){
 
@@ -95,7 +100,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             variable = row.substr(0, first_index);
             row = row.substr(first_index+1, row.length() - first_index);
 
-            //cout << row << endl;
+
             switch(first_letter){
                 case 'i':
                     //int type variable declaration
@@ -275,6 +280,10 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                     }
                 }
 
+            }
+            else if(variable == "CLEARALL"){
+            //this method clears all registers
+                clearAll(intRegisMap);
             }
             else if(variable == "STOP"){
                 exit(0);
@@ -1170,5 +1179,23 @@ void jump(string jump_name,ifstream& file){
 
         }
         cout << "METHOD " << jump_name << " not found. "<< endl;
+}
+void clearAll(unordered_map<string,int>& intRegisMap){
+
+    //clears all registers 1-16;
+    for(int i = 1; i <= 16; i++){
+        string str;
+        ostringstream convert;
+        convert << i;
+        str = convert.str();
+        str = "R"+str;
+        auto it = intRegisMap.find(str);
+        if(it != intRegisMap.end()){
+            it->second = 0;
+        }
+        else{
+            intRegisMap.insert({str, 0});
+        }
+    }
 
 }

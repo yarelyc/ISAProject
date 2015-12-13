@@ -1,12 +1,2 @@
-int counter 3
-int x 4
-int y 3
 
-START
-METHOD hello
-INPUT R1
-EQUAL counter R1
-JUMP hello
-PLUS x y
-OUTPUT x
-STOP
+
