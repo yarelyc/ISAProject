@@ -14,10 +14,16 @@ link int arr
 int t 4
 
 START
-INPUT R2
-PLUSA y arr
-OUTPUT y
+DECREA arr
+OUTPUTA arr
+MOVEDOWNA arr
+INCREA arr
+OUTPUTA arr
+MOVEDOWNA arr
+INCREA arr
+OUTPUTA arr
 MOVEUPA arr
-PLUSA R2 arr
-OUTPUT R2
+DECREA arr
+OUTPUTA arr
 STOP
+
