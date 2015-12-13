@@ -14,16 +14,13 @@ link int arr
 int t 4
 
 START
+METHOD nums
+OUTPUT arr
+OUTPUT w
+JUMP nums
+METHOD hello
 DECREA arr
-OUTPUTA arr
-MOVEDOWNA arr
-INCREA arr
-OUTPUTA arr
-MOVEDOWNA arr
-INCREA arr
-OUTPUTA arr
-MOVEUPA arr
-DECREA arr
-OUTPUTA arr
+OUTPUT arr
+JUMP hello
 STOP
 

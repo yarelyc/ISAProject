@@ -46,6 +46,9 @@ void increA(string key,unordered_map<string, list<int> >& intAddressLink,
                   unordered_map<string, list<int>::iterator> & intIterator);
 void decreA(string key,unordered_map<string, list<int> >& intAddressLink,
                   unordered_map<string, list<int>::iterator> & intIterator);
+void jump(string method, string var_one, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
+     unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
+
 int main(){
 
     unordered_map<string,int> intVariaMap; //the key: variable name, value: type value
@@ -86,14 +89,15 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
          while (getline(file,row) && row != "START")
          {
 
-
             first_index = row.find(' ');
             first_letter = row[0];
             row = row.substr(first_index+1, row.length() - first_index);
 
             first_index = row.find(' ');
             variable = row.substr(0, first_index);
+
             row = row.substr(first_index+1, row.length() - first_index);
+            //cout << row << endl;
             switch(first_letter){
                 case 'i':
                     //int type variable declaration
@@ -164,13 +168,12 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
 
 
             first_index = row.find(' ');
-
             variable = row.substr(0, first_index);
+
             row = row.substr(first_index+1, row.length() - first_index);
+
             if(variable == "LOAD"){
-
                 load(row, intVariaMap, intRegisMap);
-
             }
 
             else if(variable == "INPUT"){
@@ -210,6 +213,20 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             }
 
             else if(variable == "JUMP"){
+
+               /* ifstream filec;
+                filec.open("Variable.txt");
+                if(filec.fail()){
+                    cout<<"Error opening file\n";
+                        exit(1);
+                    }
+                while(variable != "METHOD"){
+
+                    getline(file, row);
+                    first_index = row.find(' ');
+                    variable = row.substr(0, first_index);
+                }
+            */
 
             }
 
@@ -260,6 +277,17 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             else if(variable == "STOP"){
                 exit(0);
             }
+            else if(variable == "METHOD")
+            {
+                while(variable != "JUMP"){
+
+                    getline(file, row);
+                    first_index = row.find(' ');
+                    variable = row.substr(0, first_index);
+                    cout << "VAR "<<variable << endl;
+                }
+            }
+
             else {
             cout << "Error: wrong input " <<variable<<endl;
             }
@@ -746,6 +774,7 @@ bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_m
         int first_index = str.find(' ');
         first_variable = str.substr(0, first_index);
         str = str.substr(first_index+1, str.length() - first_index);
+
         int num;
 
         //second variable will be access to add to first
@@ -1063,3 +1092,50 @@ void decreA(string key, unordered_map<string, list<int> >& intAddressLink,
     else
         cout << "Error: Item was not defined "<<key << endl;
 }
+void jump(string method,string var_one, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
+     unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator){
+
+
+        ifstream file;
+        file.open("Variable.txt");
+
+        if(file.fail()){
+        cout<<"Error opening file\n";
+        exit(1);
+    }
+        int first_index;
+        string variable;
+
+        string row = " ";
+
+
+       while (getline(file,row)){
+
+
+            first_index = row.find(' ');
+            variable = row.substr(0, first_index);
+            row = row.substr(first_index+1, row.length() - first_index);
+            string first_variable;
+            first_variable = row.substr(0, first_index);
+
+
+
+
+            if(variable == "METHOD" && var_one == first_variable){
+                while(variable != "JUMP" && first_variable != var_one){
+
+                      cout << "first var " << first_variable<< endl;
+                getline(file,row);
+
+                first_index = row.find(' ');
+                variable = row.substr(0, first_index);
+
+                    row = row.substr(first_index+1, row.length() - first_index);
+                    string first_variable;
+                    first_variable = row.substr(0, first_index);
+
+        }
+
+    }
+}
+     }
