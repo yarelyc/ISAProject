@@ -33,15 +33,15 @@ bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
 bool greaterThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void moveupA(string key,unordered_map<string, list<int> >& intAddressLink,
-     unordered_map<string, list<int>::iterator> & intIterator);
+        unordered_map<string, list<int>::iterator> & intIterator);
 void movedownA(string key,unordered_map<string, list<int> >& intAddressLink,
-     unordered_map<string, list<int>::iterator> & intIterator);
-void loadA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
-void outputA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
+        unordered_map<string, list<int>::iterator> & intIterator);
+void loadA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
+        unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
+void outputA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
+        unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
 void  plusA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>&
-    intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string,
-    list<int>::iterator> & intIterator);
-
+        intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string,list<int>::iterator> & intIterator);
 void increA(string key,unordered_map<string, list<int> >& intAddressLink,
                   unordered_map<string, list<int>::iterator> & intIterator);
 void decreA(string key,unordered_map<string, list<int> >& intAddressLink,
@@ -71,7 +71,6 @@ int main(){
     }
     loadInstructions(file, intVariaMap, intRegisMap, intAddressLink,  intIterators);
     file.close();
-
 
     return EXIT_SUCCESS;
 }
@@ -143,7 +142,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                                     if(var != 0)
                                         insertToLink(key,dat,intAddressLink, intIterator);
                                     else{
-                                        cout<<"Error inserting to array, cannot convert to int: " <<row<<endl;
+                                        cout<<"Error inserting to array, cannot convert to int: \"" <<row<<"\""<<endl;
                                         exit(1);
                                     }
 
@@ -156,7 +155,6 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                  default:
                         cout<<endl;
             }
-            // cout << row << endl;
 
          }
 
@@ -168,9 +166,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             variable = row.substr(0, first_index);
             row = row.substr(first_index+1, row.length() - first_index);
             if(variable == "LOAD"){
-
                 load(row, intVariaMap, intRegisMap);
-
             }
 
             else if(variable == "INPUT"){
@@ -206,18 +202,19 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             }
 
             else if(variable == "EQUAL"){
-             //   equalL(row,intVariaMap, intRegisMap);
+                if(equalL(row,intVariaMap, intRegisMap)){
+                    //if statement is truewe read second line
+                }
+                else{
+                    //we dont read second line
+                    getline(file,row);
+                    if(row == "STOP"){
+                        exit(0);
+                    }
+                }
             }
 
             else if(variable == "JUMP"){
-
-            }
-
-            else if(variable == "EQUAL"){
-
-            }
-
-            else if(variable == "IFTHEN"){
 
             }
 
@@ -232,12 +229,10 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                  increA(row, intAddressLink, intIterator);
             }
             else if(variable == "DECREA"){
-
                  decreA(row, intAddressLink, intIterator);
             }
 
             else if(variable == "MOVEUPA"){
-
                 moveupA(row,intAddressLink, intIterator);
 
             }
@@ -252,16 +247,35 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
 
             else if(variable == "GREATER"){
 
-                greaterThan(row,intVariaMap, intRegisMap);
+                if(greaterThan(row,intVariaMap, intRegisMap)){
+                    //if statement is truewe read second line
+                }
+                else{
+                    //we dont read second line
+                    getline(file,row);
+                    if(row == "STOP"){
+                        exit(0);
+                    }
+                }
             }
             else if(variable == "LESS"){
+             if(lessThan(row,intVariaMap, intRegisMap)){
+                    //if statement is truewe read second line
+                }
+                else{
+                    //we dont read second line
+                    getline(file,row);
+                    if(row == "STOP"){
+                        exit(0);
+                    }
+                }
 
             }
             else if(variable == "STOP"){
                 exit(0);
             }
             else {
-            cout << "Error: wrong input " <<variable<<endl;
+            cout << "Error: wrong input \"" <<variable<<"\""<<endl;
             }
         }
 
@@ -329,7 +343,7 @@ void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<str
                 if(it != intVariaMap.end()) //if found, the second variable carries int
                         num = it -> second;
                 else{
-                    cout<<"Error: undefined variable: "<<data<<endl;
+                    cout<<"Error: undefined variable: \""<<data<<"\""<<endl;
                     exit(1);
                 }
 
@@ -343,7 +357,7 @@ void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<str
             }
 
             else {
-                cout << "Register: " << register1 << " does not exits" << endl;
+                cout << "Register: \"" << register1 << "\" does not exits" << endl;
                 exit(1);
             }
 
@@ -413,7 +427,7 @@ void input(string register1, unordered_map<string,int>& intVariaMap, unordered_m
             it->second = dat;
         }
         else{
-           cout<<"Error: undefined variable: "<<register1<<endl;
+           cout<<"Error: undefined variable: \""<<register1<<"\""<<endl;
            exit(0);
         }
 
@@ -443,7 +457,7 @@ void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
         //access information from variable
       unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
           if ( got == intVariaMap.end() ){
-           cout<<"Error: undefined variable: "<<str<<endl;
+           cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
           }
           else
@@ -456,12 +470,12 @@ void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
        if(it != intVariaMap.end())
             it->second = num;
         else{
-            cout<<"Error: undefined variable: "<<variable<<endl;
+            cout<<"Error: undefined variable: \""<<variable<<"\""<<endl;
             exit(1);
         }
      }
      else{
-        cout<<"Error: undefined variable or can't save to register: "<<variable<<endl;
+        cout<<"Error: undefined variable or can't save to register: \""<<variable<<"\""<<endl;
         exit(1);
      }
 }
@@ -492,7 +506,7 @@ void plusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<str
         //access information from variable
       unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
           if ( got == intVariaMap.end() ){
-             cout<<"Error: undefined variable: "<<str<<endl;
+             cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
           }
           else
@@ -543,7 +557,7 @@ void minusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
         //access information from variable
       unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
           if ( got == intVariaMap.end() ){
-             cout<<"Error: undefined variable: "<<str<<endl;
+             cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
           }
           else
@@ -567,7 +581,7 @@ void minusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
        if(it != intVariaMap.end())
             it->second = it->second - num;
         else{
-         cout<<"Error: undefined variable: "<<first_variable<<endl;
+         cout<<"Error: undefined variable: \""<<first_variable<<"\""<<endl;
             exit(1);
         }
     }
@@ -597,7 +611,7 @@ void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
         //access information from variable
       unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
           if ( got == intVariaMap.end() ){
-           cout<<"Error: undefined variable: "<<str<<endl;
+           cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
           }
           else
@@ -624,7 +638,7 @@ void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
             it->second *= num;
         else{
 
-         cout<<"Error: undefined variable: "<<first_variable<<endl;
+         cout<<"Error: undefined variable: \""<<first_variable<<"\""<<endl;
             exit(1);
         }
     }
@@ -650,7 +664,7 @@ void incr(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
             it->second++;
         else{
 
-         cout<<"Error: undefined variable: "<<str<<endl;
+         cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
         }
     }
@@ -676,14 +690,14 @@ void decr(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
             it->second--;
         else{
 
-         cout<<"Error: undefined variable: "<<str<<endl;
+         cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
         }
     }
 
 }
 
-bool equalL(string str, string str2, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
+bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
 
     string first_variable;
     int first_index = str.find(' ');
@@ -707,7 +721,7 @@ bool equalL(string str, string str2, unordered_map<string,int>& intVariaMap, uno
         //access information from variable
       unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
           if ( got == intVariaMap.end() ){
-             cout<<"Error: undefined variable: "<<str<<endl;
+             cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
         }
           else
@@ -732,7 +746,7 @@ bool equalL(string str, string str2, unordered_map<string,int>& intVariaMap, uno
              return (it->second == num);
         }
         else{
-         cout<<"Error: undefined variable: "<<str<<endl;
+         cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
         }
 
@@ -762,7 +776,7 @@ bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_m
         //access information from variable
       unordered_map<string,int>::const_iterator variable = intVariaMap.find (str);
                 if ( variable == intVariaMap.end() ){
-                    cout<<"Error: undefined variable: "<<str<<endl;
+                    cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
                     exit(1);
                 }
                 else
@@ -779,7 +793,7 @@ bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_m
                 }
                 else
                 {
-                    cout<<"Error: undefined variable: "<<str<<endl;
+                    cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
                     exit(1);
                 }
 
@@ -792,7 +806,7 @@ bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_m
                 return (it->second > num);
             }
             else{
-            cout<<"Error: undefined variable: "<<str<<endl;
+            cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
         }
     }
@@ -821,7 +835,7 @@ bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<s
         //access information from variable
                 unordered_map<string,int>::const_iterator variable = intVariaMap.find (str);
                 if ( variable == intVariaMap.end() ){
-                    cout<<"Error: undefined variable: "<<str<<endl;
+                    cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
                     exit(1);
                 }
                 else
@@ -846,7 +860,7 @@ bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<s
                 return (it->second < num);
             }
              else{
-            cout<<"Error: undefined variable: "<<str<<endl;
+            cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
         }
     }
@@ -888,12 +902,12 @@ void  plusA(string str,unordered_map<string,int>& intVariaMap, unordered_map<str
             ptrMemory->second +=num;
         }
         else{
-        cout<<"Error: undefined variable: "<<str<<endl;
+        cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
         exit(1);
         }
     }
     else{
-        cout<<"Error: undefined variable: "<<str<<endl;
+        cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
         exit(1);
     }
 }
@@ -919,10 +933,10 @@ void movedownA(string key, unordered_map<string, list<int> >& intAddressLink,
               }
             }
             else
-                cout << "Error: Accessing the array "<<key << endl;
+                cout << "Error: Accessing the array \""<<key <<"\""<<endl;
     }
     else
-        cout << "Error: Item was not defined "<<key << endl;
+        cout << "Error: Item was not defined \""<<key << endl;
 }
 void moveupA(string key,unordered_map<string, list<int> >& intAddressLink,
                   unordered_map<string, list<int>::iterator> & intIterator){
@@ -944,10 +958,10 @@ void moveupA(string key,unordered_map<string, list<int> >& intAddressLink,
                   }
                 }
                 else
-                    cout << "Error: Accessing the array "<<key << endl;
+                    cout << "Error: Accessing the array \""<<key<<"\""<<endl;
         }
         else
-            cout << "Error: Item was not defined "<<key << endl;
+            cout << "Error: Item was not defined \""<<key <<"\""<<endl;
 }
 
 void loadA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>&
@@ -966,7 +980,7 @@ void loadA(string str,unordered_map<string,int>& intVariaMap, unordered_map<stri
         num = *(it->second);
     }
     else{
-        cout<<"Error: undefined link: "<<str<<endl;
+        cout<<"Error: undefined link: \""<<str<<"\""<<endl;
         exit(1);
     }
 
@@ -989,7 +1003,7 @@ void loadA(string str,unordered_map<string,int>& intVariaMap, unordered_map<stri
 
     }
     else{
-        cout<<"Error: undefined register: "<<first_variable<<endl;
+        cout<<"Error: undefined register: \""<<first_variable<<"\""<<endl;
          exit(1);
         }
 }
@@ -1007,7 +1021,7 @@ void outputA(string str,unordered_map<string,int>& intVariaMap, unordered_map<st
 
     }
     else{
-        cout<<"Error: undefined link: "<<str<<endl;
+        cout<<"Error: undefined link: \""<<str<<"\""<<endl;
         exit(1);
     }
 
@@ -1033,10 +1047,10 @@ void increA(string key, unordered_map<string, list<int> >& intAddressLink,
               }
             }
             else
-                cout << "Error: Accessing the array "<<key << endl;
+                cout << "Error: Accessing the array \""<<key <<"\""<<endl;
     }
     else
-        cout << "Error: Item was not defined "<<key << endl;
+        cout << "Error: Item was not defined \""<<key <<"\""<<endl;
 }
 void decreA(string key, unordered_map<string, list<int> >& intAddressLink,
                   unordered_map<string, list<int>::iterator> & intIterator){
@@ -1058,8 +1072,8 @@ void decreA(string key, unordered_map<string, list<int> >& intAddressLink,
               }
             }
             else
-                cout << "Error: Accessing the array "<<key << endl;
+                cout << "Error: Accessing the array \""<<key <<"\""<<endl;
     }
     else
-        cout << "Error: Item was not defined "<<key << endl;
+        cout << "Error: Item was not defined \""<<key <<"\""<<endl;
 }
