@@ -11,10 +11,15 @@ link int arr
      end
 int t 4
 START
-MOVEUPA arr
+DECREA arr
 OUTPUTA arr
 MOVEDOWNA arr
+INCREA arr
+OUTPUTA arr
+MOVEDOWNA arr
+INCREA arr
 OUTPUTA arr
 MOVEUPA arr
+DECREA arr
 OUTPUTA arr
 STOP
