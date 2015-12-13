@@ -329,11 +329,11 @@ void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<str
            string register1 = data.substr(0 , first_index);
            data = data.substr(first_index + 1, data.length() - first_index);
 
-
-           if(register1 == "R1"|| register1 == "R2"|| register1 == "R3"|| register1 == "R4"|| register1 == "R5"||
+            //if in register
+           if((register1 == "R1"|| register1 == "R2"|| register1 == "R3"|| register1 == "R4"|| register1 == "R5"||
               register1 == "R6"|| register1 == "R7"|| register1 == "R8"|| register1 == "R9"|| register1 == "R10"||
               register1 == "R11"|| register1 == "R12"|| register1 == "R13"|| register1 == "R14"||
-              register1 == "R15"|| register1 == "R16"){
+              register1 == "R15"|| register1 == "R16")){
                // cout << "yes" << endl;
 
 
@@ -366,11 +366,14 @@ void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<str
 void output(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
     //output will always have only one variable or register in the STR;
 
-    if((str.length() == 3 || str.length() == 2) && str[0] == 'R'){
+    if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+              str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
+              str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
+              str == "R15"|| str == "R16"){
     //this means we output information from the register
     unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
 
-      if ( got == intRegisMap.end() )
+      if (got == intRegisMap.end() )
       //it didn't find it
         cout << "0"<<endl;
       else
@@ -380,8 +383,10 @@ void output(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
     //this means that it saves in the variable
       unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
 
-      if ( got == intVariaMap.end() )
-        cout << "0"<<endl;
+      if (got == intVariaMap.end() ){
+          cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
+           exit(0);
+      }
       else
         cout << got->second<<endl;
 
@@ -444,7 +449,10 @@ void save(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
     str = str.substr(first_index+1, str.length() - first_index);
     int num;
 
-    if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){//if register
+   if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+              str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
+              str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
+              str == "R15"|| str == "R16"){//if register
         //access information from register
         unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
           if ( got == intRegisMap.end() )
@@ -492,8 +500,10 @@ void plusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<str
 
 
     //second variable will be access to add to first
-    //TODO::: CHANGE THE CHECK METHOD FOR REGISTERS -> R1, R2,R3, R4
-      if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+     if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+              str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
+              str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
+              str == "R15"|| str == "R16"){
         //access information from register
         unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
           if ( got == intRegisMap.end() )//not found
@@ -516,8 +526,11 @@ void plusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<str
 
 
     //first variable will be access to add to first
-      if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
-        //save to variable
+        if(first_variable == "R1"|| first_variable == "R2"|| first_variable == "R3"|| first_variable == "R4"|| first_variable == "R5"||
+              first_variable == "R6"|| first_variable == "R7"|| first_variable == "R8"|| first_variable == "R9"|| first_variable == "R10"||
+              first_variable == "R11"|| first_variable == "R12"|| first_variable == "R13"|| first_variable == "R14"||
+              first_variable == "R15"|| first_variable == "R16"){
+        //save to register
        auto it = intRegisMap.find(first_variable);
        if(it != intRegisMap.end())
             it->second += num;
@@ -530,6 +543,10 @@ void plusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<str
        auto it = intVariaMap.find(first_variable);
        if(it != intVariaMap.end())
             it->second += num;
+        else{
+            cout<<"Error: undefined variable: \""<<first_variable<<"\""<<endl;
+            exit(1);
+        }
     }
 }
 void minusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
@@ -543,8 +560,10 @@ void minusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
 
 
     //second variable will be access to add to first
-    //TODO: ARACELI change to check registers and exit if its not found
-      if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+      if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+              str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
+              str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
+              str == "R15"|| str == "R16"){
         //access information from register
         unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
           if ( got == intRegisMap.end() )
@@ -566,7 +585,10 @@ void minusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
       }
 
     //first variable will be access to add to first
-      if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
+        if(first_variable == "R1"|| first_variable == "R2"|| first_variable == "R3"|| first_variable == "R4"|| first_variable == "R5"||
+              first_variable == "R6"|| first_variable == "R7"|| first_variable == "R8"|| first_variable == "R9"|| first_variable == "R10"||
+              first_variable == "R11"|| first_variable == "R12"|| first_variable == "R13"|| first_variable == "R14"||
+              first_variable == "R15"|| first_variable == "R16"){
         //save to variable
        auto it = intRegisMap.find(first_variable);
        if(it != intRegisMap.end())
@@ -597,8 +619,10 @@ void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
 
 
     //second variable will be access to add to first
-    //TODO: ARACELI change to check registers and exit if its not found
-      if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+    if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+              str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
+              str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
+              str == "R15"|| str == "R16"){
         //access information from register
         unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
           if ( got == intRegisMap.end() )
@@ -621,9 +645,12 @@ void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
 
 
     //first variable will be access to add to first
-     //TODO: ARACELI change to check registers and exit if its not found
-      if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
-        //save to variable
+
+     if(first_variable == "R1"|| first_variable == "R2"|| first_variable == "R3"|| first_variable == "R4"|| first_variable == "R5"||
+              first_variable == "R6"|| first_variable == "R7"|| first_variable == "R8"|| first_variable == "R9"|| first_variable == "R10"||
+              first_variable == "R11"|| first_variable == "R12"|| first_variable == "R13"|| first_variable == "R14"||
+              first_variable == "R15"|| first_variable == "R16"){
+        //save to register
        auto it = intRegisMap.find(first_variable);
        if(it != intRegisMap.end())
             it->second *= num;
@@ -647,8 +674,10 @@ void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
 void incr(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
 
       //first variable will be access to add to first
-       //TODO: ARACELI change to check registers and exit if its not found
-      if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+        if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+              str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
+              str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
+              str == "R15"|| str == "R16"){
         //save to variable
        auto it = intRegisMap.find(str);
        if(it != intRegisMap.end())
@@ -673,8 +702,10 @@ void incr(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
 }
 void decr(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
     //first variable will be access to add to first
-      //TODO: ARACELI change to check registers and exit if its not found
-      if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+     if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+              str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
+              str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
+              str == "R15"|| str == "R16"){
         //save to variable
        auto it = intRegisMap.find(str);
        if(it != intRegisMap.end())
@@ -708,7 +739,10 @@ bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
 
 
     //second variable will be access to add to first
-      if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+      if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+              str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
+              str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
+              str == "R15"|| str == "R16"){
         //access information from register
         unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
           if ( got == intRegisMap.end() )
@@ -730,7 +764,10 @@ bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
       }
 
     //first variable will be access to add to first
-      if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
+     if(first_variable == "R1"|| first_variable == "R2"|| first_variable == "R3"|| first_variable == "R4"|| first_variable == "R5"||
+              first_variable == "R6"|| first_variable == "R7"|| first_variable == "R8"|| first_variable == "R9"|| first_variable == "R10"||
+              first_variable == "R11"|| first_variable == "R12"|| first_variable == "R13"|| first_variable == "R14"||
+              first_variable == "R15"|| first_variable == "R16"){
         //save to variable
        auto it = intRegisMap.find(first_variable);
 
@@ -763,7 +800,10 @@ bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_m
         int num;
 
         //second variable will be access to add to first
-        if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+          if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+              str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
+              str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
+              str == "R15"|| str == "R16"){
             //access information from register
                 unordered_map<string,int>::const_iterator variable = intRegisMap.find (str);
                 if ( variable == intRegisMap.end() )
@@ -785,7 +825,10 @@ bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_m
         }
 
     //first variable will be access to add to first
-        if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
+           if(first_variable == "R1"|| first_variable == "R2"|| first_variable == "R3"|| first_variable == "R4"|| first_variable == "R5"||
+              first_variable == "R6"|| first_variable == "R7"|| first_variable == "R8"|| first_variable == "R9"|| first_variable == "R10"||
+              first_variable == "R11"|| first_variable == "R12"|| first_variable == "R13"|| first_variable == "R14"||
+              first_variable == "R15"|| first_variable == "R16"){
         //save to variable
                 auto it = intRegisMap.find(first_variable);
                 if(it != intRegisMap.end()){
@@ -822,7 +865,10 @@ bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<s
         int num;
 
     //second variable will be access to add to first
-        if(((str.length() == 3 || str.length() == 2) && str[0] == 'R')){
+          if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+              str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
+              str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
+              str == "R15"|| str == "R16"){
         //access information from register
                 unordered_map<string,int>::const_iterator variable = intRegisMap.find (str);
                 if ( variable == intRegisMap.end() )
@@ -845,7 +891,10 @@ bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<s
 
 
     //first variable will be access to add to first
-      if(((first_variable.length() == 3 || first_variable.length() == 2) && first_variable[0] == 'R')){
+        if(first_variable == "R1"|| first_variable == "R2"|| first_variable == "R3"|| first_variable == "R4"|| first_variable == "R5"||
+              first_variable == "R6"|| first_variable == "R7"|| first_variable == "R8"|| first_variable == "R9"|| first_variable == "R10"||
+              first_variable == "R11"|| first_variable == "R12"|| first_variable == "R13"|| first_variable == "R14"||
+              first_variable == "R15"|| first_variable == "R16"){
         //save to variable
             auto it = intRegisMap.find(first_variable);
             if(it != intRegisMap.end()){
