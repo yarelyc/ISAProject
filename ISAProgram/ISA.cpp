@@ -38,6 +38,9 @@ void movedownA(string key,unordered_map<string, list<int> >& intAddressLink,
 
 void loadA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
 void outputA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
+void  plusA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>&
+    intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string,
+    list<int>::iterator> & intIterator);
 
 int main(){
 
@@ -219,7 +222,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             }
 
             else if(variable == "PLUSA"){
-
+                plusA(row,intVariaMap, intRegisMap, intAddressLink,intIterator);
             }
 
             else if(variable == "MOVEUPA"){
@@ -253,8 +256,6 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             else if(variable == "STOP"){
                 exit(0);
             }
-
-
             else {
             cout << "Error: wrong input " <<variable<<endl;
             }
@@ -847,6 +848,50 @@ bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<s
     //first variable will be access to add to first
 
 }
+void  plusA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>&
+    intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string,
+    list<int>::iterator> & intIterator){
+
+    string first_variable;
+    int first_index = str.find(' ');
+    int num = 0;
+    first_variable = str.substr(0, first_index);
+    str = str.substr(first_index+1, str.length() - first_index);
+    auto ptrMemory = intVariaMap.find(first_variable);
+    auto ptr = intIterator.find(str);
+    if(ptr != intIterator.end()){
+        //iterator was found
+        num = *(ptr->second);
+
+        if(first_variable == "R1"|| first_variable == "R2"|| first_variable == "R3"|| first_variable == "R4"|| first_variable == "R5"||
+              first_variable == "R6"|| first_variable == "R7"|| first_variable == "R8"|| first_variable == "R9"|| first_variable == "R10"||
+              first_variable == "R11"|| first_variable == "R12"|| first_variable == "R13"|| first_variable == "R14"||
+              first_variable == "R15"|| first_variable == "R16"){
+               // cout << "yes" << endl;
+
+        auto it = intRegisMap.find(first_variable);
+
+        if(it != intRegisMap.end()){
+            it->second += num;
+        }
+        else{
+            intRegisMap.insert({first_variable, num});
+        }
+
+        }
+        else if(ptrMemory != intVariaMap.end()){
+            ptrMemory->second +=num;
+        }
+        else{
+        cout<<"Error: undefined variable: "<<str<<endl;
+        exit(1);
+        }
+    }
+    else{
+        cout<<"Error: undefined variable: "<<str<<endl;
+        exit(1);
+    }
+}
 
 
 void moveupA(string key, unordered_map<string, list<int> >& intAddressLink,
@@ -900,7 +945,9 @@ void movedownA(string key,unordered_map<string, list<int> >& intAddressLink,
             cout << "Error: Item was not defined "<<key << endl;
 }
 
-void loadA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator){
+void loadA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>&
+    intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string,
+    list<int>::iterator> & intIterator){
 
     string first_variable;
     int first_index = str.find(' ');
