@@ -19,6 +19,8 @@ INPUT counter
 
 METHOD sum
 INPUT num
+MOVEDOWNA arr
+SAVEA arr num
 PLUS R1 num
 DECRE counter
 EQUAL counter zero
@@ -26,5 +28,11 @@ JUMP output
 JUMP sum
 
 METHOD output
+OUTPUTA arr
+MOVEUPA arr
+OUTPUTA arr
+MOVEUPA arr
+OUTPUTA arr
+MOVEUPA arr
 OUTPUT R1
 STOP

@@ -47,6 +47,8 @@ void increA(string key,unordered_map<string, list<int> >& intAddressLink,
                   unordered_map<string, list<int>::iterator> & intIterator);
 void decreA(string key,unordered_map<string, list<int> >& intAddressLink,
                   unordered_map<string, list<int>::iterator> & intIterator);
+void saveA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
+        unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
 
 void jump(string jump_name,ifstream& file);
 
@@ -291,6 +293,9 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             else if(variable == "METHOD")
             {
                 //
+            }
+            else if(variable == "SAVEA"){
+                saveA(row,intVariaMap, intRegisMap, intAddressLink, intIterator);
             }
 
             else {
@@ -778,6 +783,7 @@ bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
         //access information from variable
       unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
           if ( got == intVariaMap.end() ){
+            //check if in iterators
              cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
         }
@@ -1112,7 +1118,7 @@ void increA(string key, unordered_map<string, list<int> >& intAddressLink,
             if(ptr != intIterator.end()){
 
                 for( list<int>::iterator its = (it->second).begin(); its != (it->second).end(); its++){
-                if(its == ptr->second){
+                 if(its == ptr->second){
 
                     ptr->second= its;
                     *its = *its + 1;
@@ -1200,6 +1206,64 @@ void clearAll(unordered_map<string,int>& intRegisMap){
         else{
             intRegisMap.insert({str, 0});
         }
+    }
+
+}
+
+void saveA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>&
+    intRegisMap, unordered_map<string, list<int> >& intAddressLink, unordered_map<string,
+    list<int>::iterator> & intIterator){
+
+    string first_variable;
+    int first_index = str.find(' ');
+    first_variable = str.substr(0, first_index);
+    str = str.substr(first_index+1, str.length() - first_index);
+    int num = 0;
+
+    //second variable will be access to add to first
+    if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+        str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
+        str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
+        str == "R15"|| str == "R16"){
+        //access information from register
+        unordered_map<string,int>::const_iterator variable = intRegisMap.find (str);
+        if ( variable == intRegisMap.end() )
+            num = 0;
+        else
+            num = variable->second;
+        }
+
+    else{
+        //access information from variable
+        unordered_map<string,int>::const_iterator variable = intVariaMap.find (str);
+        if ( variable == intVariaMap.end() ){
+            cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
+            exit(1);
+        }
+        else
+        num = variable->second;
+        //save to register
+    }
+     auto it = intIterator.find(first_variable);
+    if(it != intIterator.end()){
+
+        //assign  the value in the link list
+        auto its = intAddressLink.find(first_variable);
+        if(its != intAddressLink.end()){
+              for( list<int>::iterator ptr = (its->second).begin(); ptr != (its->second).end(); ptr++){
+                 if(ptr == it->second){
+                    *ptr = num;
+                    it->second = ptr;
+                }
+              }
+       }
+
+
+
+    }
+    else{
+          cout << "Error: Item was not defined \""<<first_variable <<"\""<<endl;
+          exit(1);
     }
 
 }
