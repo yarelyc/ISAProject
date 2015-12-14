@@ -1,0 +1,23 @@
+int num 0
+link int arr
+int 3
+int 4
+int 7
+int 6
+int 9
+end
+
+START
+INPUT num
+EQUAL num arr
+JUMP ends
+JUMP down
+METHOD down
+MOVEDOWNA arr
+EQUAL num arr
+JUMP ends
+JUMP down
+METHOD ends
+OUTPUTA arr
+STOP
+STOP

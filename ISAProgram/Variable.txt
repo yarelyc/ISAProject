@@ -1,2 +1,12 @@
+int x 8
+int y 7
+link int arr
+int 4
+int 5
+int 6
+end
 
-
+START
+LESS arr y
+OUTPUT y
+STOP

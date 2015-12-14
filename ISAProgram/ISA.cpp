@@ -30,9 +30,19 @@ void minusS(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
 void mult(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void incr(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void decr(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
-bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
-bool greaterThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
-bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
+bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
+            unordered_map<string, list<int> >& intAddressLink,
+            unordered_map<string, list<int>::iterator> & intIterator);
+void outputA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
+             unordered_map<string, list<int> >& intAddressLink,
+             unordered_map<string, list<int>::iterator> & intIterator);
+//void outputA(string str,unordered_map<string,int>& intVariaMap);
+bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
+            unordered_map<string, list<int> >& intAddressLink,
+            unordered_map<string, list<int>::iterator> & intIterator);
+bool lessThan(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
+            unordered_map<string, list<int> >& intAddressLink,
+            unordered_map<string, list<int>::iterator> & intIterator);
 void moveupA(string key,unordered_map<string, list<int> >& intAddressLink,
         unordered_map<string, list<int>::iterator> & intIterator);
 void movedownA(string key,unordered_map<string, list<int> >& intAddressLink,
@@ -211,7 +221,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
             }
 
             else if(variable == "EQUAL"){
-                if(equalL(row,intVariaMap, intRegisMap)){
+                if(equalL(row,intVariaMap, intRegisMap, intAddressLink, intIterator)){
                     //if statement is truewe read second line
                 }
                 else{
@@ -257,7 +267,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
 
             else if(variable == "GREATER"){
 
-                if(greaterThan(row,intVariaMap, intRegisMap)){
+                if(greaterThan(row,intVariaMap, intRegisMap, intAddressLink, intIterator)){
                     //if statement is truewe read second line
                 }
                 else{
@@ -269,7 +279,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
                 }
             }
             else if(variable == "LESS"){
-             if(lessThan(row,intVariaMap, intRegisMap)){
+             if(lessThan(row,intVariaMap, intRegisMap, intAddressLink, intIterator)){
                     //if statement is truewe read second line
                 }
                 else{
@@ -747,13 +757,17 @@ void decr(string str, unordered_map<string,int>& intVariaMap, unordered_map<stri
 
 }
 
-bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
-
+bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
+            unordered_map<string, list<int> >& intAddressLink,
+            unordered_map<string, list<int>::iterator> & intIterator)
+{
     string first_variable;
     int first_index = str.find(' ');
     first_variable = str.substr(0, first_index);
     str = str.substr(first_index+1, str.length() - first_index);
     int num;
+
+
 
 
 
@@ -772,10 +786,17 @@ bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
       }
       else{
         //access information from variable
-      unordered_map<string,int>::const_iterator got = intVariaMap.find (str);
+      unordered_map<string,int>::const_iterator got = intVariaMap.find(str);
           if ( got == intVariaMap.end() ){
+               unordered_map<string, list<int>::iterator>::const_iterator got = intIterator.find(str);
+                if ( got != intIterator.end() ){
+
+                    num = *(got -> second);
+                }
+                else{
              cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
+                }
         }
           else
              num = got->second;
@@ -790,16 +811,23 @@ bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
         //save to variable
        auto it = intRegisMap.find(first_variable);
 
+
        if(it != intRegisMap.end()){
             return (it->second == num);
        }
+
 
       }
       else{
         //save to variable
        auto it = intVariaMap.find(first_variable);
+        auto its = intIterator.find(first_variable);
        if(it != intVariaMap.end()){
              return (it->second == num);
+        }
+        else if( its != intIterator.end())
+        {
+            return(*(its -> second) == num);
         }
         else{
          cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
@@ -807,133 +835,168 @@ bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
         }
 
        }
-    }
-
-bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
-
-
-        string first_variable;
-        int first_index = str.find(' ');
-        first_variable = str.substr(0, first_index);
-        str = str.substr(first_index+1, str.length() - first_index);
-
-        int num;
-
-        //second variable will be access to add to first
-          if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
-              str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
-              str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
-              str == "R15"|| str == "R16"){
-            //access information from register
-                unordered_map<string,int>::const_iterator variable = intRegisMap.find (str);
-                if ( variable == intRegisMap.end() )
-                    num = 0;
-                else
-                    num = variable->second;
-            }
-
-        else{
-        //access information from variable
-      unordered_map<string,int>::const_iterator variable = intVariaMap.find (str);
-                if ( variable == intVariaMap.end() ){
-                    cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
-                    exit(1);
-                }
-                else
-                    num = variable->second;
-        //save to register
-        }
-
-    //first variable will be access to add to first
-           if(first_variable == "R1"|| first_variable == "R2"|| first_variable == "R3"|| first_variable == "R4"|| first_variable == "R5"||
-              first_variable == "R6"|| first_variable == "R7"|| first_variable == "R8"|| first_variable == "R9"|| first_variable == "R10"||
-              first_variable == "R11"|| first_variable == "R12"|| first_variable == "R13"|| first_variable == "R14"||
-              first_variable == "R15"|| first_variable == "R16"){
-        //save to variable
-                auto it = intRegisMap.find(first_variable);
-                if(it != intRegisMap.end()){
-                    return (it->second > num);
-                }
-                else
-                {
-                    cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
-                    exit(1);
-                }
-
-        }
-
-        else{
-        //save to variable
-            auto it = intVariaMap.find(first_variable);
-            if(it != intVariaMap.end()){
-                return (it->second > num);
-            }
-            else{
-            cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
-            exit(1);
-        }
-    }
-    //first variable will be access to add to first
 }
-bool lessThan(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap){
+
+bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
+            unordered_map<string, list<int> >& intAddressLink,
+            unordered_map<string, list<int>::iterator> & intIterator){
 
 
         string first_variable;
-        int first_index = str.find(' ');
-        first_variable = str.substr(0, first_index);
-        str = str.substr(first_index+1, str.length() - first_index);
-        int num;
+    int first_index = str.find(' ');
+    first_variable = str.substr(0, first_index);
+    str = str.substr(first_index+1, str.length() - first_index);
+    int num;
+
+
+
+
 
     //second variable will be access to add to first
-          if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+      if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
               str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
               str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
               str == "R15"|| str == "R16"){
         //access information from register
-                unordered_map<string,int>::const_iterator variable = intRegisMap.find (str);
-                if ( variable == intRegisMap.end() )
-                    num = 0;
-                else
-                    num = variable->second;
-            }
+        unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
+          if ( got == intRegisMap.end() )
+                num = 0;
+          else
+             num = got->second;
 
-        else{
+      }
+      else{
         //access information from variable
-                unordered_map<string,int>::const_iterator variable = intVariaMap.find (str);
-                if ( variable == intVariaMap.end() ){
-                    cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
-                    exit(1);
+      unordered_map<string,int>::const_iterator got = intVariaMap.find(str);
+          if ( got == intVariaMap.end() ){
+               unordered_map<string, list<int>::iterator>::const_iterator got = intIterator.find(str);
+                if ( got != intIterator.end() ){
+
+                    num = *(got -> second);
                 }
-                else
-                    num = variable->second;
+                else{
+             cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
+            exit(1);
+                }
+        }
+          else
+             num = got->second;
         //save to register
       }
 
-
     //first variable will be access to add to first
-        if(first_variable == "R1"|| first_variable == "R2"|| first_variable == "R3"|| first_variable == "R4"|| first_variable == "R5"||
+     if(first_variable == "R1"|| first_variable == "R2"|| first_variable == "R3"|| first_variable == "R4"|| first_variable == "R5"||
               first_variable == "R6"|| first_variable == "R7"|| first_variable == "R8"|| first_variable == "R9"|| first_variable == "R10"||
               first_variable == "R11"|| first_variable == "R12"|| first_variable == "R13"|| first_variable == "R14"||
               first_variable == "R15"|| first_variable == "R16"){
         //save to variable
-            auto it = intRegisMap.find(first_variable);
-            if(it != intRegisMap.end()){
-                return (it->second < num);
-            }
+       auto it = intRegisMap.find(first_variable);
+
+
+       if(it != intRegisMap.end()){
+            return (it->second > num);
+       }
+
 
       }
-     else{
+      else{
         //save to variable
-            auto it = intVariaMap.find(first_variable);
-            if(it != intVariaMap.end()){
-                return (it->second < num);
-            }
-             else{
-            cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
+       auto it = intVariaMap.find(first_variable);
+        auto its = intIterator.find(first_variable);
+       if(it != intVariaMap.end()){
+             return (it->second > num);
+        }
+        else if( its != intIterator.end())
+        {
+            return(*(its -> second) > num);
+        }
+        else{
+         cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
             exit(1);
         }
-    }
+
+       }
+
+}
+bool lessThan(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
+            unordered_map<string, list<int> >& intAddressLink,
+            unordered_map<string, list<int>::iterator> & intIterator){
+
+
+       string first_variable;
+    int first_index = str.find(' ');
+    first_variable = str.substr(0, first_index);
+    str = str.substr(first_index+1, str.length() - first_index);
+    int num;
+
+
+
+
+
+    //second variable will be access to add to first
+      if(str == "R1"|| str == "R2"|| str == "R3"|| str == "R4"|| str == "R5"||
+              str == "R6"|| str == "R7"|| str == "R8"|| str == "R9"|| str == "R10"||
+              str == "R11"|| str == "R12"|| str == "R13"|| str == "R14"||
+              str == "R15"|| str == "R16"){
+        //access information from register
+        unordered_map<string,int>::const_iterator got = intRegisMap.find (str);
+          if ( got == intRegisMap.end() )
+                num = 0;
+          else
+             num = got->second;
+
+      }
+      else{
+        //access information from variable
+      unordered_map<string,int>::const_iterator got = intVariaMap.find(str);
+          if ( got == intVariaMap.end() ){
+               unordered_map<string, list<int>::iterator>::const_iterator got = intIterator.find(str);
+                if ( got != intIterator.end() ){
+
+                    num = *(got -> second);
+                }
+                else{
+             cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
+            exit(1);
+                }
+        }
+          else
+             num = got->second;
+        //save to register
+      }
+
     //first variable will be access to add to first
+     if(first_variable == "R1"|| first_variable == "R2"|| first_variable == "R3"|| first_variable == "R4"|| first_variable == "R5"||
+              first_variable == "R6"|| first_variable == "R7"|| first_variable == "R8"|| first_variable == "R9"|| first_variable == "R10"||
+              first_variable == "R11"|| first_variable == "R12"|| first_variable == "R13"|| first_variable == "R14"||
+              first_variable == "R15"|| first_variable == "R16"){
+        //save to variable
+       auto it = intRegisMap.find(first_variable);
+
+
+       if(it != intRegisMap.end()){
+            return (it->second < num);
+       }
+
+
+      }
+      else{
+        //save to variable
+       auto it = intVariaMap.find(first_variable);
+        auto its = intIterator.find(first_variable);
+       if(it != intVariaMap.end()){
+             return (it->second < num);
+        }
+        else if( its != intIterator.end())
+        {
+            return(*(its -> second) < num);
+        }
+        else{
+         cout<<"Error: undefined variable: \""<<str<<"\""<<endl;
+            exit(1);
+        }
+
+       }
 
 }
 void  plusA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>&
@@ -994,11 +1057,17 @@ void movedownA(string key, unordered_map<string, list<int> >& intAddressLink,
             if(ptr != intIterator.end()){
 
               //  cout << *(ptr->second) << endl;
+              bool found = false;
                 for( list<int>::iterator its = (it->second).begin(); its != (it->second).end(); its++){
                 if(its == ptr->second){
                     advance(its,1);
                     ptr->second = its;
+                    found = true;
                 }
+              }
+              if(found == false){
+                cout << "Item not found."<<endl;
+                exit(1);
               }
             }
             else
