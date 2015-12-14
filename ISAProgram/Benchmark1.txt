@@ -1,12 +1,3 @@
-
-int x 8
-link int arr
-int 4
-int 5
-int 6
-end
-
-
 int counter 0
 int zero 0 
 int y 5
@@ -22,19 +13,12 @@ link int arr
      end
 int t 4
 
-
-START
-LESS arr y
-OUTPUT y
-STOP
 START
 CLEARALL
 INPUT counter
 
 METHOD sum
 INPUT num
-MOVEDOWNA arr
-SAVEA arr num
 PLUS R1 num
 DECRE counter
 EQUAL counter zero
@@ -42,12 +26,5 @@ JUMP output
 JUMP sum
 
 METHOD output
-OUTPUTA arr
-MOVEUPA arr
-OUTPUTA arr
-MOVEUPA arr
-OUTPUTA arr
-MOVEUPA arr
 OUTPUT R1
 STOP
-
