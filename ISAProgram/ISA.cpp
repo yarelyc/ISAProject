@@ -18,7 +18,7 @@
 using namespace std;
 
 void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
-     unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
+     unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator, string file_name);
 void load(string data, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap);
 void insertToLink(string key, int value, unordered_map<string, list<int> >& intAddressLink,
      unordered_map<string, list<int>::iterator> & intIterator);
@@ -36,7 +36,6 @@ bool equalL(string str, unordered_map<string,int>& intVariaMap, unordered_map<st
 void outputA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
              unordered_map<string, list<int> >& intAddressLink,
              unordered_map<string, list<int>::iterator> & intIterator);
-//void outputA(string str,unordered_map<string,int>& intVariaMap);
 bool greaterThan(string str, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
             unordered_map<string, list<int> >& intAddressLink,
             unordered_map<string, list<int>::iterator> & intIterator);
@@ -60,7 +59,7 @@ void decreA(string key,unordered_map<string, list<int> >& intAddressLink,
 void saveA(string str,unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,
         unordered_map<string, list<int> >& intAddressLink, unordered_map<string, list<int>::iterator> & intIterator);
 
-void jump(string jump_name,ifstream& file);
+void jump(string jump_name,ifstream& file, string file_name);
 
 
 void clearAll(unordered_map<string,int>& intRegisMap);
@@ -79,22 +78,22 @@ int main(){
 
     //hashmap with key as strings and value of list int iterators
     unordered_map<string, list<int>::iterator > intIterators;
-
+    string file_name = "Benchmark2.txt";
 
 
     ifstream file;
-    file.open("Variable.txt");
+    file.open(file_name);
     if(file.fail()){
         cout<<"Error opening file\n";
         exit(1);
     }
-    loadInstructions(file, intVariaMap, intRegisMap, intAddressLink,  intIterators);
+    loadInstructions(file, intVariaMap, intRegisMap, intAddressLink,  intIterators, file_name);
     file.close();
 
     return EXIT_SUCCESS;
 }
 void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, unordered_map<string,int>& intRegisMap,  unordered_map<string, list<int> >& intAddressLink,
-                      unordered_map<string, list<int>::iterator >& intIterator)
+                      unordered_map<string, list<int>::iterator >& intIterator, string file_name)
 {
         int first_index;
         string variable;
@@ -237,7 +236,7 @@ void loadInstructions(ifstream& file, unordered_map<string,int>& intVariaMap, un
 
             else if(variable == "JUMP"){
 
-               jump(row, file);
+               jump(row, file, file_name);
             }
 
             else if(variable == "LOADA"){
@@ -1223,10 +1222,10 @@ void decreA(string key, unordered_map<string, list<int> >& intAddressLink,
         cout << "Error: Item was not defined \""<<key <<"\""<<endl;
 }
 
-void jump(string jump_name,ifstream& file){
+void jump(string jump_name,ifstream& file, string file_name){
 
         file.close();
-        file.open("Variable.txt");
+        file.open(file_name);
 
         if(file.fail()){
             cout<<"Error opening file\n";
@@ -1247,7 +1246,6 @@ void jump(string jump_name,ifstream& file){
 
             //row is are method name
             row = row.substr(first_index+1, row.length() - first_index);
-
             if(row == jump_name && first_word == "METHOD")
             {
                 return;
